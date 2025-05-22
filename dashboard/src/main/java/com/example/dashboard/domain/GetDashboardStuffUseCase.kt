@@ -8,3 +8,15 @@ class GetDashboardStuffUseCase @Inject constructor(
 ) {
     suspend fun execute(): DomainResult<List<UserEntity>> = repo.getDashboardData()
 }
+
+class AddStudentUseCase @Inject constructor(
+    private val repo: DashboardRepo
+) {
+    suspend fun execute(name: String) = repo.addStudent(name)
+}
+
+class GetStudentsUseCase @Inject constructor(
+    private val repo: DashboardRepo
+) {
+    fun execute() = repo.getStudents()
+}

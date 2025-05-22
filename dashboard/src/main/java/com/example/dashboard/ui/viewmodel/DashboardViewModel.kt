@@ -1,25 +1,43 @@
 package com.example.dashboard.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.dashboard.domain.AddStudentUseCase
 import com.example.dashboard.domain.DomainResult
 import com.example.dashboard.domain.GetDashboardStuffUseCase
+import com.example.dashboard.domain.GetStudentsUseCase
+import com.example.dashboard.domain.model.UserEntity
 import com.example.dashboard.ui.model.User
 import com.example.dashboard.ui.model.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
-    private val getDashboardStuffUseCase: GetDashboardStuffUseCase
+    private val getDashboardStuffUseCase: GetDashboardStuffUseCase,
+    private val addStudentUseCase: AddStudentUseCase,
+    private val getStudentsUseCase: GetStudentsUseCase
 ) : ViewModel() {
+
     private val _tripsState = MutableStateFlow<UiState<List<User>>>(UiState.Loading)
     val tripsState = _tripsState.asStateFlow()
+
+    val students: StateFlow<List<UserEntity>> = getStudentsUseCase.execute()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = emptyList()
+        )
 
     init {
         viewModelScope.launch {
@@ -37,6 +55,18 @@ class DashboardViewModel @Inject constructor(
                     }
                 }
             }
+        }
+    }
+
+    fun addUser(name: String) {
+        viewModelScope.launch {
+            addStudentUseCase.execute(name)
+//            delay(2000)
+//            getStudentsUseCase.execute().collectLatest { students ->
+//                students.forEach { student ->
+//                    Log.d("StudentName", student.name)
+//                }
+//            }
         }
     }
 }

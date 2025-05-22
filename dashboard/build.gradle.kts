@@ -58,6 +58,11 @@ dependencies {
     // hilt navigation with compose
     implementation(libs.androidx.hilt.navigation.compose)
 
+    // room db
+    api(libs.room.runtime)
+    api(libs.room.ktx)
+    ksp(libs.room.compiler)
+
     implementation(project(":core"))
 
     implementation(libs.androidx.appcompat)

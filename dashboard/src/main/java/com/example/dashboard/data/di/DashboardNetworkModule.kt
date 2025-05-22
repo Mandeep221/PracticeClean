@@ -1,6 +1,6 @@
 package com.example.dashboard.data.di
 
-import com.example.core.network.di.PlaceholderJsonRetrofit
+import com.example.core.data.network.di.PlaceholderJsonRetrofit
 import com.example.dashboard.data.remote.DashboardApi
 import dagger.Module
 import dagger.Provides
