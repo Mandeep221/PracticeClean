@@ -20,8 +20,10 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -65,11 +67,12 @@ fun DashboardScreen(
     val lifeCycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifeCycleOwner) {
         val observer = LifecycleEventObserver { owner, event ->
-            when(event) {
+            when (event) {
                 Lifecycle.Event.ON_CREATE -> {}
                 Lifecycle.Event.ON_RESUME -> {
                     viewModel.fetchData()
                 }
+
                 else -> Unit
             }
         }
@@ -97,7 +100,7 @@ fun DashboardLoading() {
 }
 
 @Composable
-private fun DashboardContent(
+fun DashboardContent(
     modifier: Modifier = Modifier,
     students: List<UserEntity>, // technically should be a ui model
     list: List<User>,
@@ -122,7 +125,7 @@ private fun DashboardContent(
 
         Spacer(modifier = Modifier.size(32.dp))
         Text(text = students.joinToString(", ") { it.name })
-        students.map {it.name}.joinToString { ", " }
+        students.map { it.name }.joinToString { ", " }
         Spacer(modifier = Modifier.size(16.dp))
 
         Row(
