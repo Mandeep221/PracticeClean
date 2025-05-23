@@ -1,8 +1,10 @@
 package com.example.practice
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -23,6 +25,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.dashboard.ui.composable.DashboardScreen
 import com.example.dashboard.ui.composable.ScoreLogicScreen
+import com.example.dashboard.ui.viewmodel.DashboardViewModel
 import com.example.practice.navigation.Screen
 import com.example.practice.ui.theme.PracticeTheme
 import com.example.profile.composable.ProfileScreen
@@ -30,11 +33,11 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    private val vm: DashboardViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        enableEdgeToEdge()
-        // This will be the Navhost here
-
         setContent {
             PracticeTheme {
                 val navController = rememberNavController()
@@ -84,8 +87,32 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+
+        // Flatten nested streams
+        val allPolicies = getEmployees().flatMap { it.policies }
+        Log.d("Policies", "$allPolicies")
     }
 }
+
+fun getEmployees() = listOf(
+    Employee(
+        name = "Manu",
+        policies = listOf("Life", "Auto")
+    ),
+    Employee(
+        name = "Nanu",
+        policies = listOf("Home", "Boat")
+    ),
+    Employee(
+        name = "Osheen",
+        policies = listOf("Villa", "Shop")
+    )
+)
+
+data class Employee(
+    val name: String,
+    val policies: List<String>
+)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -40,6 +40,10 @@ class DashboardViewModel @Inject constructor(
         )
 
     init {
+        fetchData()
+    }
+
+    fun fetchData() {
         viewModelScope.launch {
             when (val result = getDashboardStuffUseCase.execute()) {
                 is DomainResult.Success -> {
@@ -61,12 +65,6 @@ class DashboardViewModel @Inject constructor(
     fun addUser(name: String) {
         viewModelScope.launch {
             addStudentUseCase.execute(name)
-//            delay(2000)
-//            getStudentsUseCase.execute().collectLatest { students ->
-//                students.forEach { student ->
-//                    Log.d("StudentName", student.name)
-//                }
-//            }
         }
     }
 }
