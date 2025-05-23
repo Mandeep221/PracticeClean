@@ -12,10 +12,11 @@ import androidx.compose.ui.graphics.Color
 
 @Composable
 fun ProfileScreen(
+    name: String,
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
     Box(modifier = modifier.fillMaxSize().background(color = Color.Gray)) {
-        Text(text = "Profile", modifier = Modifier.align(Alignment.Center).clickable { onClick() })
+        Text(text = name, modifier = Modifier.align(Alignment.Center).clickable { onClick() })
     }
 }

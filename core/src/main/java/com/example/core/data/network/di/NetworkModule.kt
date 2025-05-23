@@ -26,7 +26,7 @@ object NetworkModule {
 
     @PlaceholderJsonRetrofit
     @Provides
-    fun providesRetrofit(okHttpClient: OkHttpClient) = Retrofit.Builder()
+    fun providesRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL_JSON_PLACEHOLDER)
         .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create())
@@ -35,7 +35,7 @@ object NetworkModule {
 
     @BooksRetrofit
     @Provides
-    fun providesBooksRetrofit(okHttpClient: OkHttpClient) = Retrofit.Builder()
+    fun providesBooksRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL_BOOKS)
         .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create())

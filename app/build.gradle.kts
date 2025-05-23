@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt.android.gradle.plugin)
     alias(libs.plugins.ksp.devtools)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -62,7 +63,8 @@ dependencies {
     implementation(project(":dashboard"))
 
     // compose navigation
-     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.kotlinx.serialization.json)
 
     // coroutines
     implementation(libs.coroutines)

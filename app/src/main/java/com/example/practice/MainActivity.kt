@@ -30,12 +30,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.example.dashboard.ui.composable.DashboardContent
 import com.example.dashboard.ui.composable.DashboardScreen
 import com.example.dashboard.ui.composable.ScoreLogicScreen
 import com.example.dashboard.ui.model.User
 import com.example.dashboard.ui.viewmodel.DashboardViewModel
-import com.example.practice.navigation.Screen
+import com.example.practice.navigation.Dashboard
+import com.example.practice.navigation.Profile
+import com.example.practice.navigation.ScoreLogic
 import com.example.practice.ui.theme.PracticeTheme
 import com.example.profile.composable.ProfileScreen
 import dagger.hilt.android.AndroidEntryPoint
@@ -52,10 +55,10 @@ class MainActivity : ComponentActivity() {
             PracticeTheme {
                 val navController = rememberNavController()
                 val currentBAckStackEntry by navController.currentBackStackEntryAsState()
-                val currentDestination = currentBAckStackEntry?.destination
-                val currentScreen = when (currentDestination?.route) {
-                    Screen.Dashboard.route -> "Dashboard"
-                    Screen.Profile.route -> "Profile"
+                val currentRoute = currentBAckStackEntry?.destination?.route ?: ""
+                val currentScreen = when {
+                    currentRoute.startsWith(Dashboard::class.qualifiedName.orEmpty()) -> "Dashboard"
+                    currentRoute.startsWith(Profile::class.qualifiedName.orEmpty()) -> "Profile"
                     else -> "ScoreLogic"
                 }
                 val canGoBack = navController.previousBackStackEntry != null
@@ -77,13 +80,13 @@ class MainActivity : ComponentActivity() {
                 ) { innerPadding ->
                     NavHost(
                         navController = navController,
-                        startDestination = Screen.Dashboard.route,
+                        startDestination = Dashboard,
                         modifier = Modifier.padding(innerPadding)
                     ) {
-                        composable(Screen.Dashboard.route) {
+                        composable<Dashboard> {
                             DashboardScreen(
                                 onClick = {
-                                    navController.navigate(Screen.Profile.route)
+                                    navController.navigate(Profile(name = "Manu"))
                                     // also show snackbar
                                     coroutineScope.launch {
                                         snackBarHostState.showSnackbar(
@@ -95,14 +98,16 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                         }
-                        composable(Screen.Profile.route) {
+                        composable<Profile> {
+                            val args = it.toRoute<Profile>()
                             ProfileScreen(
+                                name = args.name ?: "",
                                 onClick = {
-                                    navController.navigate(Screen.ScoreLogic.route)
+                                    navController.navigate(ScoreLogic)
                                 }
                             )
                         }
-                        composable(Screen.ScoreLogic.route) {
+                        composable<ScoreLogic> {
                             ScoreLogicScreen()
                         }
                     }
